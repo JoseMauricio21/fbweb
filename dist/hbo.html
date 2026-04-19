@@ -34,7 +34,9 @@ html, body {
 <div id="player"></div>
 
 <script>
-const manifestUrl = "http://8.243.126.131:8000/play/a0f4/index.m3u8";
+const directManifestUrl = "http://8.243.126.131:8000/play/a0f4/index.m3u8";
+const proxyManifestUrl = "/stream/hbo";
+const manifestUrl = window.location.protocol === "https:" ? proxyManifestUrl : directManifestUrl;
 const defaultBitmovinKey = "fa7bb753-749b-47ba-8134-838e896b252d";
 
 const keyFromQuery = new URLSearchParams(window.location.search).get("bitmovinKey");

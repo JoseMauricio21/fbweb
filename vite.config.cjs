@@ -20,6 +20,16 @@ module.exports = defineConfig({
                 target: "https://iptv-epg.org",
                 changeOrigin: true,
                 rewrite: () => "/files/epg-ar.xml"
+            },
+            "/stream/amz": {
+                target: "https://live-pv-ta.amazon.fastly-edge.com",
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/stream\/amz/, "")
+            },
+            "/stream/hbo": {
+                target: "http://8.243.126.131:8000",
+                changeOrigin: true,
+                rewrite: () => "/play/a0f4/index.m3u8"
             }
         }
     },

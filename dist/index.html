@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Canales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-1: #060a12;
+    --bg-2: #101a2b;
+    --panel: rgba(15, 25, 40, 0.78);
+    --panel-strong: rgba(22, 36, 58, 0.88);
+    --line: rgba(180, 210, 255, 0.22);
+    --text: #e8f0ff;
+    --muted: #95a8c7;
+    --accent: #00d2a8;
+    --accent-soft: rgba(0, 210, 168, 0.2);
+    --warm: #ffd166;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Space Grotesk", sans-serif;
+    color: var(--text);
+}
+
+body {
+    background:
+        radial-gradient(circle at 10% 10%, rgba(0, 210, 168, 0.24), transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(255, 209, 102, 0.17), transparent 32%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2) 60%, #162644);
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: minmax(260px, 30vw) minmax(0, 1fr);
+    gap: 14px;
+}
+
+.sidebar {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+    backdrop-filter: blur(8px);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.brand {
+    margin-bottom: 18px;
+}
+
+.brand h1 {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.brand p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.channel-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+}
+
+.channel-button {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    background: var(--panel-strong);
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.channel-button:hover {
+    transform: translateX(4px);
+    border-color: var(--accent);
+}
+
+.channel-button.active {
+    border-color: var(--accent);
+    background: linear-gradient(130deg, var(--accent-soft), rgba(255, 209, 102, 0.13));
+}
+
+.channel-title {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+
+.channel-subtitle {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.preview {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+    backdrop-filter: blur(8px);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.preview-title {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 0.03em;
+    font-size: 1.8rem;
+}
+
+.preview-note {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.open-link {
+    color: #0b1320;
+    background: var(--warm);
+    text-decoration: none;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.frame-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 260px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+
+.frame-wrap::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+}
+
+.frame-wrap::before {
+    top: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, rgba(2, 5, 11, 0.95) 0%, rgba(2, 5, 11, 0.58) 45%, rgba(2, 5, 11, 0) 100%);
+}
+
+.frame-wrap:hover::before,
+.frame-wrap:focus-within::before,
+.frame-wrap.overlay-visible::before {
+    opacity: 1;
+}
+
+.epg-overlay {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    z-index: 4;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 6px 0;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    backdrop-filter: none;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.frame-wrap:hover .epg-overlay,
+.frame-wrap:focus-within .epg-overlay,
+.frame-wrap.overlay-visible .epg-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.epg-logo-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 0;
+    overflow: visible;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+.epg-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    background: transparent;
+}
+
+.epg-logo-fallback {
+    font-family: "Oswald", sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    color: #fff;
+}
+
+.epg-meta {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.epg-channel {
+    margin: 0;
+    color: #fff;
+    font-size: 1.12rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+.epg-now {
+    margin: 0;
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+.epg-next-meta {
+    margin-left: auto;
+    min-width: 32%;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.epg-next-label {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.epg-next {
+    margin: 0;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+#previewFrame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sidebar, .preview {
+    animation: fadeIn 380ms ease both;
+}
+
+@media (max-width: 920px) {
+    .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .sidebar {
+        padding: 16px 14px;
+    }
+
+    .brand h1 {
+        font-size: 1.7rem;
+    }
+
+    .preview-title {
+        font-size: 1.45rem;
+    }
+
+    .preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .open-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .epg-overlay {
+        left: 8px;
+        right: 8px;
+        top: 8px;
+        gap: 10px;
+        padding: 8px 10px;
+    }
+
+    .epg-logo-box {
+        width: 46px;
+        height: 46px;
+    }
+
+    .epg-logo {
+        width: 46px;
+        height: 46px;
+    }
+
+    .epg-channel {
+        font-size: 0.95rem;
+    }
+
+    .epg-now {
+        font-size: 0.84rem;
+    }
+
+    .epg-next-meta {
+        min-width: 34%;
+    }
+
+    .epg-next-label,
+    .epg-next {
+        font-size: 0.78rem;
+    }
+}
+</style>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>Canales</h1>
+            <p>Selecciona un canal para verlo en la previsualizacion.</p>
+        </div>
+
+        <ul class="channel-list">
+            <li>
+                <button class="channel-button active" data-src="cinemax.html" data-name="CINEMAX HD">
+                    <span class="channel-title">CINEMAX HD</span>
+                    <span class="channel-subtitle">Canal 01 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="bandamax.html" data-name="BANDAMAX HD">
+                    <span class="channel-title">BANDAMAX HD</span>
+                    <span class="channel-subtitle">Canal 02 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="hbo.html" data-name="HBO">
+                    <span class="channel-title">HBO</span>
+                    <span class="channel-subtitle">Canal 03 - HLS</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="canal5.html" data-name="CANAL 5">
+                    <span class="channel-title">CANAL 5</span>
+                    <span class="channel-subtitle">Canal 05 - HLS</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="bitme.html" data-name="BITME">
+                    <span class="channel-title">BITME</span>
+                    <span class="channel-subtitle">Canal 06 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="distritocomedia.html" data-name="DISTRITO COMEDIA">
+                    <span class="channel-title">DISTRITO COMEDIA</span>
+                    <span class="channel-subtitle">Canal 07 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="canal9.html" data-name="CANAL 9">
+                    <span class="channel-title">CANAL 9</span>
+                    <span class="channel-subtitle">Canal 09 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="telehit.html" data-name="TELEHIT">
+                    <span class="channel-title">TELEHIT</span>
+                    <span class="channel-subtitle">Canal 10 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="cinemaxeast.html" data-name="CINEMAX EAST">
+                    <span class="channel-title">CINEMAX EAST</span>
+                    <span class="channel-subtitle">Canal 11 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="golden.html" data-name="GOLDEN">
+                    <span class="channel-title">GOLDEN</span>
+                    <span class="channel-subtitle">Canal 12 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="warner.html" data-name="WARNER CHANNEL MX">
+                    <span class="channel-title">WARNER CHANNEL MX</span>
+                    <span class="channel-subtitle">Canal 04 - ClearKey</span>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="preview">
+        <div class="preview-header">
+            <div>
+                <h2 id="channelName" class="preview-title">CINEMAX HD</h2>
+                <p class="preview-note">Previsualizacion en tiempo real</p>
+            </div>
+            <a id="openChannelLink" class="open-link" href="cinemax.html" target="_blank" rel="noopener noreferrer">Abrir canal</a>
+        </div>
+
+        <div class="frame-wrap">
+            <iframe
+                id="previewFrame"
+                src="cinemax.html"
+                title="Previsualizacion del canal"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen
+                loading="eager">
+            </iframe>
+                <div id="epgOverlay" class="epg-overlay" aria-live="polite">
+                    <div class="epg-logo-box">
+                        <img id="epgLogo" class="epg-logo" alt="Logo del canal" hidden>
+                        <span id="epgLogoFallback" class="epg-logo-fallback">TV</span>
+                    </div>
+                    <div class="epg-meta">
+                        <p id="epgChannelName" class="epg-channel">CINEMAX HD</p>
+                        <p id="epgNowTitle" class="epg-now">EPG pendiente (envia tu lista)</p>
+                    </div>
+                    <div class="epg-next-meta">
+                        <p class="epg-next-label">Siguiente</p>
+                        <p id="epgNextTitle" class="epg-next">Siguiente: pendiente</p>
+                    </div>
+                </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const buttons = document.querySelectorAll(".channel-button");
+const previewFrame = document.getElementById("previewFrame");
+const frameWrap = document.querySelector(".frame-wrap");
+const epgLogo = document.getElementById("epgLogo");
+const epgLogoFallback = document.getElementById("epgLogoFallback");
+const epgChannelName = document.getElementById("epgChannelName");
+const epgNowTitle = document.getElementById("epgNowTitle");
+const epgNextTitle = document.getElementById("epgNextTitle");
+const channelName = document.getElementById("channelName");
+const openChannelLink = document.getElementById("openChannelLink");
+const storageKey = "BITMOVIN_PLAYER_KEY";
+const defaultBitmovinKey = "fa7bb753-749b-47ba-8134-838e896b252d";
+let overlayTimeoutId = null;
+const cinemaxXmltvSourceUrl = "/epg/mx1.xml.gz";
+const cinemaxXmltvDirectUrl = "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz";
+const cinemaxChannelHint = "Canal.Cinemax.(México).mx";
+const bandamaxChannelHint = "Canal.Bandamax.mx";
+const warnerChannelHint = "Canal.Warner.TV.(México).mx";
+const hbo2XmltvSourceUrl = "/epg/ar.xml";
+const hbo2XmltvDirectUrl = "https://iptv-epg.org/files/epg-ar.xml";
+const hbo2ChannelHint = "HBO2.ar";
+const epgRefreshIntervalMs = 15 * 60 * 1000;
+let isMx1EpgLoading = false;
+let isArEpgLoading = false;
+let epgBootstrapped = false;
+let mx1EpgIntervalId = null;
+let arEpgIntervalId = null;
+
+const channelEPG = {
+    cinemax: {
+        logo: "",
+        channelName: "CINEMAX HD",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    bandamax: {
+        logo: "",
+        channelName: "BANDAMAX HD",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    hbo: {
+        logo: "",
+        channelName: "HBO",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    canal5: {
+        logo: "",
+        channelName: "CANAL 5",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    bitme: {
+        logo: "",
+        channelName: "BITME",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    distritocomedia: {
+        logo: "",
+        channelName: "DISTRITO COMEDIA",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    canal9: {
+        logo: "",
+        channelName: "CANAL 9",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    telehit: {
+        logo: "",
+        channelName: "TELEHIT",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    cinemaxeast: {
+        logo: "",
+        channelName: "CINEMAX EAST",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    golden: {
+        logo: "",
+        channelName: "GOLDEN",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
+    warner: {
+        logo: "",
+        channelName: "WARNER CHANNEL MX",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    }
+};
+
+const currentBitmovinKey = (localStorage.getItem(storageKey) || "").trim();
+if (!currentBitmovinKey && defaultBitmovinKey) {
+    localStorage.setItem(storageKey, defaultBitmovinKey);
+}
+
+function getStoredBitmovinKey() {
+    return (localStorage.getItem(storageKey) || "").trim();
+}
+
+function buildChannelUrl(baseSrc) {
+    const key = getStoredBitmovinKey();
+
+    if (!key) {
+        return baseSrc;
+    }
+
+    const separator = baseSrc.includes("?") ? "&" : "?";
+    return `${baseSrc}${separator}bitmovinKey=${encodeURIComponent(key)}`;
+}
+
+function getActiveButton() {
+    return document.querySelector(".channel-button.active") || buttons[0];
+}
+
+function getChannelKey(value) {
+    return String(value || "")
+        .split("?")[0]
+        .trim()
+        .toLowerCase()
+        .replace(/\.html$/i, "");
+}
+
+function normalizeComparableText(value) {
+    return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+}
+
+function parseXmltvDate(value) {
+    const source = String(value || "").trim();
+    if (!source) {
+        return null;
+    }
+
+    const match = source.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(?:\s*([+\-]\d{4}))?/);
+    if (!match) {
+        return null;
+    }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]) - 1;
+    const day = Number(match[3]);
+    const hour = Number(match[4]);
+    const minute = Number(match[5]);
+    const second = Number(match[6]);
+    const offset = match[7];
+
+    const utcMs = Date.UTC(year, month, day, hour, minute, second);
+    if (!offset) {
+        return new Date(utcMs);
+    }
+
+    const sign = offset[0] === "-" ? -1 : 1;
+    const offsetHours = Number(offset.slice(1, 3));
+    const offsetMinutes = Number(offset.slice(3, 5));
+    const offsetTotalMs = sign * ((offsetHours * 60) + offsetMinutes) * 60000;
+
+    return new Date(utcMs - offsetTotalMs);
+}
+
+function formatEpgTime(date) {
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+        return "--:--";
+    }
+
+    return date.toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+async function decodeXmltvTextFromBuffer(buffer) {
+    const bytes = new Uint8Array(buffer);
+    const isGzip = bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
+
+    if (!isGzip) {
+        return new TextDecoder("utf-8").decode(buffer);
+    }
+
+    if (typeof DecompressionStream === "undefined") {
+        throw new Error("Este navegador no soporta archivos .gz con DecompressionStream");
+    }
+
+    const decompressedStream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream("gzip"));
+    return new Response(decompressedStream).text();
+}
+
+async function fetchXmltvText(url) {
+    const response = await fetch(url, {cache: "no-store"});
+    if (!response.ok) {
+        let extra = "";
+        const contentType = response.headers.get("content-type") || "";
+
+        if (contentType.includes("application/json") || contentType.includes("text/")) {
+            const body = await response.text();
+            extra = body ? ` - ${body.slice(0, 220)}` : "";
+        }
+
+        throw new Error(`HTTP ${response.status}${extra}`);
+    }
+
+    const buffer = await response.arrayBuffer();
+    return decodeXmltvTextFromBuffer(buffer);
+}
+
+async function fetchXmltvTextWithFallback(urls) {
+    const failures = [];
+
+    for (let index = 0; index < urls.length; index += 1) {
+        const url = urls[index];
+
+        try {
+            return await fetchXmltvText(url);
+        } catch (error) {
+            const message = error && error.message ? error.message : String(error);
+            failures.push(`${url} -> ${message}`);
+            console.warn("Fallo EPG en", url, error);
+        }
+    }
+
+    throw new Error(`No se pudo descargar el XMLTV. ${failures.join(" | ")}`);
+}
+
+function explainEpgError(error, channelDisplayName = "solicitado") {
+    const rawMessage = String(error && error.message ? error.message : error || "Error desconocido");
+    const message = rawMessage.toLowerCase();
+
+    if (message.includes("failed to fetch") || message.includes("cors")) {
+        return `Bloqueo CORS/red: ${rawMessage}`;
+    }
+
+    if (message.includes("decompressionstream") || message.includes(".gz")) {
+        return `Fallo al descomprimir .gz: ${rawMessage}`;
+    }
+
+    if (message.includes("xml") || message.includes("parser")) {
+        return `Fallo al leer XMLTV: ${rawMessage}`;
+    }
+
+    if (message.includes("cinemax") || message.includes("bandamax") || message.includes("warner") || message.includes("hbo") || message.includes("canal")) {
+        return `Canal ${channelDisplayName} no encontrado: ${rawMessage}`;
+    }
+
+    return `EPG error: ${rawMessage}`;
+}
+
+function getProgrammeTitle(programmeNode) {
+    const titleNodes = programmeNode.getElementsByTagName("title");
+    if (!titleNodes.length) {
+        return "Sin titulo";
+    }
+
+    return (titleNodes[0].textContent || "Sin titulo").trim();
+}
+
+function extractChannelNowFromXml(xmlText, options) {
+    const channelHint = options && options.channelHint ? String(options.channelHint) : "";
+    const channelKeyword = options && options.channelKeyword ? String(options.channelKeyword) : "";
+    const fallbackChannelName = options && options.fallbackChannelName ? String(options.fallbackChannelName) : "CANAL";
+
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+    const parserError = xmlDoc.querySelector("parsererror");
+    if (parserError) {
+        throw new Error("No se pudo interpretar el XML de EPG");
+    }
+
+    const channelNodes = Array.from(xmlDoc.getElementsByTagName("channel"));
+    const hintNormalized = normalizeComparableText(channelHint);
+    const keywordNormalized = normalizeComparableText(channelKeyword);
+
+    let selectedChannel = channelNodes.find((channelNode) => {
+        const channelId = normalizeComparableText(channelNode.getAttribute("id"));
+        return Boolean(hintNormalized) && channelId === hintNormalized;
+    });
+
+    if (!selectedChannel) {
+        selectedChannel = channelNodes.find((channelNode) => {
+            const channelId = normalizeComparableText(channelNode.getAttribute("id"));
+            if (keywordNormalized && channelId.includes(keywordNormalized)) {
+                return true;
+            }
+
+            const displayNames = Array.from(channelNode.getElementsByTagName("display-name"))
+                .map((nameNode) => normalizeComparableText(nameNode.textContent));
+
+            return displayNames.some((displayName) => {
+                if (hintNormalized && displayName === hintNormalized) {
+                    return true;
+                }
+
+                return Boolean(keywordNormalized) && displayName.includes(keywordNormalized);
+            });
+        });
+    }
+
+    if (!selectedChannel) {
+        throw new Error(`No se encontro ${fallbackChannelName} en la lista EPG`);
+    }
+
+    const channelId = (selectedChannel.getAttribute("id") || "").trim();
+    if (!channelId) {
+        throw new Error(`El canal ${fallbackChannelName} no tiene id en el EPG`);
+    }
+
+    const displayNameNode = selectedChannel.getElementsByTagName("display-name")[0];
+    const channelDisplayName = ((displayNameNode && displayNameNode.textContent) || channelId || fallbackChannelName).trim();
+
+    const iconNode = selectedChannel.getElementsByTagName("icon")[0];
+    const logo = iconNode ? String(iconNode.getAttribute("src") || "").trim() : "";
+
+    const nowMs = Date.now();
+    const programmeNodes = xmlDoc.getElementsByTagName("programme");
+    let currentProgram = null;
+    let nextProgram = null;
+
+    for (let index = 0; index < programmeNodes.length; index += 1) {
+        const programmeNode = programmeNodes[index];
+        if ((programmeNode.getAttribute("channel") || "") !== channelId) {
+            continue;
+        }
+
+        const start = parseXmltvDate(programmeNode.getAttribute("start"));
+        if (!start) {
+            continue;
+        }
+
+        const stop = parseXmltvDate(programmeNode.getAttribute("stop"));
+        const startMs = start.getTime();
+        const stopMs = stop ? stop.getTime() : (startMs + (30 * 60 * 1000));
+
+        if (nowMs >= startMs && nowMs < stopMs) {
+            currentProgram = { programmeNode, start, stop: stop || new Date(stopMs) };
+            continue;
+        }
+
+        if (startMs > nowMs) {
+            if (!nextProgram || startMs < nextProgram.start.getTime()) {
+                nextProgram = { programmeNode, start, stop: stop || null };
+            }
+        }
+    }
+
+    if (currentProgram) {
+        const title = getProgrammeTitle(currentProgram.programmeNode);
+        const nextText = nextProgram
+            ? `Siguiente: ${getProgrammeTitle(nextProgram.programmeNode)} (${formatEpgTime(nextProgram.start)})`
+            : "Siguiente: sin informacion";
+
+        return {
+            logo,
+            channelName: channelDisplayName,
+            now: `Ahora: ${title} (${formatEpgTime(currentProgram.start)} - ${formatEpgTime(currentProgram.stop)})`,
+            next: nextText
+        };
+    }
+
+    if (nextProgram) {
+        const title = getProgrammeTitle(nextProgram.programmeNode);
+        return {
+            logo,
+            channelName: channelDisplayName,
+            now: "Ahora: sin programa en este momento",
+            next: `Siguiente: ${title} (${formatEpgTime(nextProgram.start)})`
+        };
+    }
+
+    return {
+        logo,
+        channelName: channelDisplayName,
+        now: "Ahora: sin programa disponible",
+        next: "Siguiente: sin informacion"
+    };
+}
+
+function getInitials(label) {
+    const words = String(label || "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (!words.length) {
+        return "TV";
+    }
+
+    if (words.length === 1) {
+        return words[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+function showLogoFallback(channelLabel) {
+    if (!epgLogo || !epgLogoFallback) {
+        return;
+    }
+
+    epgLogo.hidden = true;
+    epgLogo.removeAttribute("src");
+    epgLogoFallback.hidden = false;
+    epgLogoFallback.textContent = getInitials(channelLabel);
+}
+
+function updateEpgOverlay(channelKey, fallbackName) {
+    const epgData = channelEPG[channelKey] || {};
+    const resolvedChannelName = epgData.channelName || fallbackName || channelKey.toUpperCase();
+    const currentProgram = epgData.now || "EPG pendiente (envia tu lista)";
+    const nextProgram = epgData.next || "Siguiente: pendiente";
+    const logo = String(epgData.logo || "").trim();
+
+    epgChannelName.textContent = resolvedChannelName;
+    epgNowTitle.textContent = currentProgram;
+    if (epgNextTitle) {
+        epgNextTitle.textContent = nextProgram;
+    }
+
+    if (!logo) {
+        showLogoFallback(resolvedChannelName);
+        return;
+    }
+
+    epgLogo.hidden = false;
+    epgLogo.alt = `Logo ${resolvedChannelName}`;
+    epgLogo.src = logo;
+    epgLogoFallback.hidden = true;
+}
+
+function refreshEpgOverlayIfActive(channelKey) {
+    const activeButton = getActiveButton();
+    if (!activeButton) {
+        return;
+    }
+
+    const activeChannelKey = getChannelKey(activeButton.dataset.src);
+    if (activeChannelKey !== channelKey) {
+        return;
+    }
+
+    updateEpgOverlay(activeChannelKey, activeButton.dataset.name);
+}
+
+async function loadMx1EpgFromXmltv() {
+    if (isMx1EpgLoading) {
+        return;
+    }
+
+    isMx1EpgLoading = true;
+    channelEPG.cinemax.now = "Cargando EPG desde epgshare...";
+    channelEPG.cinemax.next = "Siguiente: cargando...";
+    channelEPG.bandamax.now = "Cargando EPG desde epgshare...";
+    channelEPG.bandamax.next = "Siguiente: cargando...";
+    channelEPG.warner.now = "Cargando EPG desde epgshare...";
+    channelEPG.warner.next = "Siguiente: cargando...";
+    refreshEpgOverlayIfActive("cinemax");
+    refreshEpgOverlayIfActive("bandamax");
+    refreshEpgOverlayIfActive("warner");
+
+    try {
+        const xmlText = await fetchXmltvTextWithFallback([
+            cinemaxXmltvSourceUrl,
+            cinemaxXmltvDirectUrl
+        ]);
+
+        try {
+            const cinemaxEpgData = extractChannelNowFromXml(xmlText, {
+                channelHint: cinemaxChannelHint,
+                channelKeyword: "cinemax",
+                fallbackChannelName: "CINEMAX"
+            });
+
+            channelEPG.cinemax = {
+                ...channelEPG.cinemax,
+                ...cinemaxEpgData
+            };
+        } catch (error) {
+            channelEPG.cinemax.now = explainEpgError(error, "CINEMAX");
+            channelEPG.cinemax.next = "Siguiente: no disponible";
+        }
+
+        try {
+            const bandamaxEpgData = extractChannelNowFromXml(xmlText, {
+                channelHint: bandamaxChannelHint,
+                channelKeyword: "bandamax",
+                fallbackChannelName: "BANDAMAX"
+            });
+
+            channelEPG.bandamax = {
+                ...channelEPG.bandamax,
+                ...bandamaxEpgData
+            };
+        } catch (error) {
+            channelEPG.bandamax.now = explainEpgError(error, "BANDAMAX");
+            channelEPG.bandamax.next = "Siguiente: no disponible";
+        }
+
+        try {
+            const warnerEpgData = extractChannelNowFromXml(xmlText, {
+                channelHint: warnerChannelHint,
+                channelKeyword: "warner",
+                fallbackChannelName: "WARNER"
+            });
+
+            channelEPG.warner = {
+                ...channelEPG.warner,
+                ...warnerEpgData
+            };
+        } catch (error) {
+            channelEPG.warner.now = explainEpgError(error, "WARNER");
+            channelEPG.warner.next = "Siguiente: no disponible";
+        }
+    } catch (error) {
+        console.warn("No se pudo cargar EPG MX1:", error);
+        const reason = explainEpgError(error, "MX1");
+        channelEPG.cinemax.now = reason;
+        channelEPG.cinemax.next = "Siguiente: no disponible";
+        channelEPG.bandamax.now = reason;
+        channelEPG.bandamax.next = "Siguiente: no disponible";
+        channelEPG.warner.now = reason;
+        channelEPG.warner.next = "Siguiente: no disponible";
+    } finally {
+        refreshEpgOverlayIfActive("cinemax");
+        refreshEpgOverlayIfActive("bandamax");
+        refreshEpgOverlayIfActive("warner");
+        isMx1EpgLoading = false;
+    }
+}
+
+async function loadArEpgFromXmltv() {
+    if (isArEpgLoading) {
+        return;
+    }
+
+    isArEpgLoading = true;
+    channelEPG.hbo.now = "Cargando EPG AR...";
+    channelEPG.hbo.next = "Siguiente: cargando...";
+    refreshEpgOverlayIfActive("hbo");
+
+    try {
+        const xmlText = await fetchXmltvTextWithFallback([
+            hbo2XmltvSourceUrl,
+            hbo2XmltvDirectUrl
+        ]);
+
+        const hbo2EpgData = extractChannelNowFromXml(xmlText, {
+            channelHint: hbo2ChannelHint,
+            channelKeyword: "hbo2",
+            fallbackChannelName: "HBO"
+        });
+
+        channelEPG.hbo = {
+            ...channelEPG.hbo,
+            ...hbo2EpgData
+        };
+    } catch (error) {
+        console.warn("No se pudo cargar EPG AR HBO2:", error);
+        channelEPG.hbo.now = explainEpgError(error, "HBO");
+        channelEPG.hbo.next = "Siguiente: no disponible";
+    } finally {
+        refreshEpgOverlayIfActive("hbo");
+        isArEpgLoading = false;
+    }
+}
+
+function getPrimaryEpgLoaderByChannel(channelKey) {
+    if (channelKey === "hbo") {
+        return loadArEpgFromXmltv;
+    }
+
+    return loadMx1EpgFromXmltv;
+}
+
+function startEpgAfterFirstChannelLoad() {
+    if (epgBootstrapped) {
+        return;
+    }
+
+    epgBootstrapped = true;
+
+    const activeButton = getActiveButton();
+    const activeChannelKey = activeButton ? getChannelKey(activeButton.dataset.src) : "cinemax";
+    const primaryLoader = getPrimaryEpgLoaderByChannel(activeChannelKey);
+    const secondaryLoader = primaryLoader === loadMx1EpgFromXmltv ? loadArEpgFromXmltv : loadMx1EpgFromXmltv;
+
+    // Prioriza el arranque del canal; despues inicia EPG en segundo plano.
+    setTimeout(async () => {
+        try {
+            await primaryLoader();
+            await secondaryLoader();
+        } catch (error) {
+            console.warn("Error inicializando EPG diferido:", error);
+        }
+
+        if (!mx1EpgIntervalId) {
+            mx1EpgIntervalId = setInterval(loadMx1EpgFromXmltv, epgRefreshIntervalMs);
+        }
+
+        if (!arEpgIntervalId) {
+            arEpgIntervalId = setInterval(loadArEpgFromXmltv, epgRefreshIntervalMs);
+        }
+    }, 1200);
+}
+
+window.setDashboardEpg = (epgMap) => {
+    if (!epgMap || typeof epgMap !== "object") {
+        return;
+    }
+
+    Object.keys(epgMap).forEach((key) => {
+        const normalizedKey = getChannelKey(key);
+        channelEPG[normalizedKey] = {
+            ...(channelEPG[normalizedKey] || {}),
+            ...(epgMap[key] || {})
+        };
+    });
+
+    const activeButton = getActiveButton();
+    if (!activeButton) {
+        return;
+    }
+
+    updateEpgOverlay(getChannelKey(activeButton.dataset.src), activeButton.dataset.name);
+};
+
+if (epgLogo) {
+    epgLogo.addEventListener("error", () => {
+        showLogoFallback(epgChannelName.textContent || "TV");
+    });
+}
+
+function showFrameOverlay(durationMs = 3500) {
+    if (!frameWrap) {
+        return;
+    }
+
+    frameWrap.classList.remove("overlay-visible");
+    void frameWrap.offsetWidth;
+    frameWrap.classList.add("overlay-visible");
+
+    if (overlayTimeoutId) {
+        clearTimeout(overlayTimeoutId);
+    }
+
+    overlayTimeoutId = setTimeout(() => {
+        frameWrap.classList.remove("overlay-visible");
+    }, durationMs);
+}
+
+function selectChannel(button) {
+    const srcBase = button.dataset.src;
+    const channelKey = getChannelKey(srcBase);
+    const src = buildChannelUrl(srcBase);
+    const name = button.dataset.name;
+
+    buttons.forEach((item) => item.classList.remove("active"));
+    button.classList.add("active");
+
+    previewFrame.src = src;
+    channelName.textContent = name;
+    openChannelLink.href = src;
+    updateEpgOverlay(channelKey, name);
+    showFrameOverlay(3500);
+}
+
+function requestAudioInFrame() {
+    if (!previewFrame.contentWindow) {
+        return;
+    }
+
+    previewFrame.contentWindow.postMessage({type: "ENABLE_AUDIO"}, "*");
+}
+
+previewFrame.addEventListener("load", () => {
+    showFrameOverlay(3500);
+    requestAudioInFrame();
+    setTimeout(requestAudioInFrame, 250);
+    setTimeout(requestAudioInFrame, 900);
+    startEpgAfterFirstChannelLoad();
+});
+
+document.addEventListener("click", requestAudioInFrame);
+document.addEventListener("pointerdown", requestAudioInFrame);
+document.addEventListener("touchstart", requestAudioInFrame, {passive: true});
+document.addEventListener("keydown", requestAudioInFrame);
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        selectChannel(button);
+        requestAudioInFrame();
+    });
+});
+
+selectChannel(getActiveButton());
+</script>
+</body>
+</html>

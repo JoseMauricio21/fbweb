@@ -88,9 +88,18 @@ export async function onRequest(context) {
         upstreamHeaders.set("range", rangeHeader);
     }
 
-    const upstreamResponse = await fetch(upstreamUrl.toString(), {
-        headers: upstreamHeaders
-    });
+    let upstreamResponse;
+    try {
+        upstreamResponse = await fetch(upstreamUrl.toString(), {
+            headers: upstreamHeaders
+        });
+    } catch (error) {
+        const message = error && error.message ? error.message : String(error);
+        return new Response(`Upstream fetch failed: ${message}`, {
+            status: 502,
+            headers: buildHeaders("text/plain; charset=utf-8")
+        });
+    }
 
     if (!upstreamResponse.ok && upstreamResponse.status !== 206) {
         return new Response(`Upstream error: ${upstreamResponse.status}`, {

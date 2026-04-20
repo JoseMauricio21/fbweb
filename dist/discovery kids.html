@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Kids - Bitmovin Player</title>
+<link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/2/2e/Discovery_Kids_logo_2016.png">
+<meta name="description" content="Discovery Kids en vivo - Bitmovin Player optimizado">
+<script src="https://cdn.bitmovin.com/player/web/8/bitmovinplayer.js" defer></script>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+}
+#player {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+}
+/* Oculta solo la barra de tiempo, mantiene audio/calidad/live/fullscreen/PiP */
+#player .bmpui-ui-seekbar,
+#player .bmpui-ui-seekbar-label {
+    display: none !important;
+}
+</style>
+</head>
+<body>
+<div id="player" aria-label="Discovery Kids Player" tabindex="0"></div>
+<script>
+// Discovery Kids - Bitmovin Player Optimizado
+const manifestUrl = "http://8.243.126.131:8000/play/a0fl/index.m3u8";
+const defaultBitmovinKey = "fa7bb753-749b-47ba-8134-838e896b252d";
+
+// Obtiene la key de la URL o localStorage
+const keyFromQuery = new URLSearchParams(window.location.search).get("bitmovinKey");
+if (keyFromQuery) localStorage.setItem("BITMOVIN_PLAYER_KEY", keyFromQuery);
+const storedBitmovinKey = (localStorage.getItem("BITMOVIN_PLAYER_KEY") || "").trim();
+const bitmovinKey = storedBitmovinKey || defaultBitmovinKey;
+if (!storedBitmovinKey && defaultBitmovinKey) localStorage.setItem("BITMOVIN_PLAYER_KEY", defaultBitmovinKey);
+
+const playerContainer = document.getElementById("player");
+let player = null;
+
+function isSpanishLanguage(language) {
+    const normalized = (language || "").toLowerCase();
+    return normalized === "es" || normalized.startsWith("es-") || normalized === "spa" || normalized.startsWith("spa-");
+}
+
+function selectSpanishAudioTrack() {
+    if (!player?.getAvailableAudio || !player?.setAudio) return;
+    const tracks = player.getAvailableAudio() || [];
+    const spanishTrack = tracks.find(track => isSpanishLanguage(track.lang || track.language));
+    if (spanishTrack?.id) player.setAudio(spanishTrack.id);
+}
+
+async function attemptAutoAudio() {
+    try {
+        if (!player) return;
+        player.unmute?.();
+        const playResult = player.play();
+        if (playResult?.then) await playResult;
+    } catch (e) { /* Silencia error de autoplay */ }
+}
+
+function registerAudioUnlockHooks() {
+    const unlock = () => attemptAutoAudio();
+    ["pointerdown", "click", "touchstart", "keydown"].forEach(evt => document.addEventListener(evt, unlock, {passive: true}));
+}
+
+window.addEventListener("message", (event) => {
+    if (event.data?.type === "ENABLE_AUDIO") attemptAutoAudio();
+});
+
+async function initPlayer() {
+    if (!bitmovinKey) return console.error("No hay key de Bitmovin disponible");
+    const config = { key: bitmovinKey, playback: { autoplay: true, muted: true } };
+    const source = { hls: manifestUrl };
+    player = new bitmovin.player.Player(playerContainer, config);
+    player.on(bitmovin.player.PlayerEvent.Error, e => console.error("Bitmovin error:", e));
+    player.on(bitmovin.player.PlayerEvent.SourceLoaded, selectSpanishAudioTrack);
+    try {
+        await player.load(source);
+        await attemptAutoAudio();
+        setTimeout(attemptAutoAudio, 800);
+    } catch (e) {
+        console.error("Error cargando stream:", e);
+    }
+}
+
+window.addEventListener("beforeunload", () => player?.destroy?.());
+registerAudioUnlockHooks();
+document.addEventListener("DOMContentLoaded", initPlayer);
+</script>
+</body>
+</html>

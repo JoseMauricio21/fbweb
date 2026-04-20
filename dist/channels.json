@@ -1,0 +1,341 @@
+{
+  "channels": [
+    {
+      "id": "bandamax",
+      "name": "BANDAMAX HD - Bitmovin Player",
+      "category": "Música",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/12/out/u/dash/BANDAMAX-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "bandamax.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "bandamax_plus",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/5wmhxwdb4l/out/v1/d7b375eb0f1c462f9090428cf2a1e132/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "bandamax_plus.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "bitme",
+      "name": "BITME - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/qej0n9zmvv/out/v1/93a227dbeef84293b95683c10fd88da2/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "bitme.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "canal5",
+      "name": "CANAL 5 - Bitmovin Player",
+      "category": "Entretenimiento",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/ntkdl68eob/out/v1/bd5dfb7676994383881bc6e71877d29d/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "canal5.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "canal9",
+      "name": "CANAL 9 - Bitmovin Player",
+      "category": "Entretenimiento",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/skz7pgjdyp/out/v1/8e7377f4d3154738b7f48baa996b35a5/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "canal9.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "cinemax",
+      "name": "CINEMAX HD - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/15/out/u/dash/CINEMAX-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "cinemax.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "cinemaxeast",
+      "name": "CINEMAX EAST - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://otte.live.fly.ww.aiv-cdn.net/iad-nitro/clients/dash/enc/rckhgp0mdp/out/v1/3952b81ea31d45b38372b128371301d2/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "cinemaxeast",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "cinemaxeast",
+      "name": "CINEMAX EAST - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://otte.live.fly.ww.aiv-cdn.net/iad-nitro/clients/dash/enc/rckhgp0mdp/out/v1/3952b81ea31d45b38372b128371301d2/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "cinemaxeast.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "depelicula",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/12/out/u/dash/DE-PELICULA-SD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "depelicula.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "discovery kids",
+      "name": "Discovery Kids - Bitmovin Player",
+      "category": "Infantil",
+      "streamUrl": "http://8.243.126.131:8000/play/a0fl/index.m3u8",
+      "streamType": "m3u8",
+      "drm": null,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Discovery_Kids_logo_2016.png",
+      "sourceFile": "discovery kids.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": false
+    },
+    {
+      "id": "distritocomedia",
+      "name": "DISTRITO COMEDIA - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/jainwiiq5g/out/v1/1094f5319566443cb6a9000810384a1a/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "distritocomedia.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "estrellasmexico",
+      "name": "HBO 2 - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://channel01-onlymex.akamaized.net/hls/live/2022749/event01/index_6.m3u8",
+      "streamType": "m3u8",
+      "drm": null,
+      "logo": null,
+      "sourceFile": "estrellasmexico.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": false
+    },
+    {
+      "id": "golden",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/ox4csgyamg/out/v1/95cf9c4df3d542f6812f382a52771327/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "golden.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "goldenedge",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/xv3tnoayi8/out/v1/46aaaeb778de4cd39893d88a7f93b05a/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "goldenedge.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "golden_edege_mexico",
+      "name": "Golden Edege - Bitmovin Player",
+      "category": "Otros",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/13/out/u/dash/GOLDEN-EDGE-SD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "golden_edege_mexico.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "hbo plus",
+      "name": "HBO Plus - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "https://latam-cache-sv2-cdn.latamlive.net/HBO_PLUS_HD_AR_ENC_LIVE/index.m3u8",
+      "streamType": "m3u8",
+      "drm": null,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2e/HBO_Plus_logo.png",
+      "sourceFile": "hbo plus.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": false
+    },
+    {
+      "id": "hbo xtreme",
+      "name": "CINEMAX HD - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "https://aca-live-ott.izzigo.tv/15/out/u/dash/HBO-XTREME-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "hbo xtreme.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "hbo",
+      "name": "HBO 2 - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "http://8.243.126.131:8000/play/a0f4/index.m3u8",
+      "streamType": "m3u8",
+      "drm": null,
+      "logo": null,
+      "sourceFile": "hbo.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": false
+    },
+    {
+      "id": "space",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Películas",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/11/out/u/dash/SPACE-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "space.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "telehit musica",
+      "name": "TELEHIT MÚSICA - Bitmovin Player",
+      "category": "Música",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/lv91k1unfv/out/v1/ab233dee5c6a40279e173e3497e36d21/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "telehit musica.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "telehit",
+      "name": "TELEHIT - Bitmovin Player",
+      "category": "Música",
+      "streamUrl": "https://live-pv-ta.amazon.fastly-edge.com/iad-nitro/live/clients/dash/enc/69onjpmgph/out/v1/bffe5e192607426d850350fcb751674b/cenc.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "telehit.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "tlnovelas",
+      "name": "GOLDEN - Bitmovin Player",
+      "category": "Novelas",
+      "streamUrl": "https:///zap-live1-ott.izzigo.tv/15/out/u/dash/TLNOVELAS-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "tlnovelas.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    },
+    {
+      "id": "warner",
+      "name": "WARNER CHANNEL MX - Bitmovin Player",
+      "category": "Entretenimiento",
+      "streamUrl": "https://zap-live1-ott.izzigo.tv/15/out/u/dash/WARNER-HD/default.mpd",
+      "streamType": "mpd",
+      "drm": {
+        "clearkey": []
+      },
+      "logo": null,
+      "sourceFile": "warner.html",
+      "valid": true,
+      "parseError": false,
+      "drmProtected": true
+    }
+  ]
+}

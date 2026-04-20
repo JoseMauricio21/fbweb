@@ -9,16 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg-1: #060a12;
-    --bg-2: #101a2b;
-    --panel: rgba(15, 25, 40, 0.78);
-    --panel-strong: rgba(22, 36, 58, 0.88);
-    --line: rgba(180, 210, 255, 0.22);
-    --text: #e8f0ff;
-    --muted: #95a8c7;
-    --accent: #00d2a8;
-    --accent-soft: rgba(0, 210, 168, 0.2);
-    --warm: #ffd166;
+    --surface: #ffffff;
+    --surface-soft: #f5f5f5;
+    --active: #ebebeb;
+    --line: #d7d7d7;
+    --text: #101010;
+    --muted: #4d4d4d;
+    --list-side-gap: clamp(120px, 15vw, 220px);
 }
 
 * {
@@ -31,83 +28,84 @@ html, body {
     height: 100%;
     font-family: "Space Grotesk", sans-serif;
     color: var(--text);
+    background: var(--surface);
 }
 
 body {
-    background:
-        radial-gradient(circle at 10% 10%, rgba(0, 210, 168, 0.24), transparent 40%),
-        radial-gradient(circle at 85% 90%, rgba(255, 209, 102, 0.17), transparent 32%),
-        linear-gradient(140deg, var(--bg-1), var(--bg-2) 60%, #162644);
+    overflow: hidden;
 }
 
 .app {
     width: 100%;
     height: 100%;
-    padding: 14px;
-    display: grid;
-    grid-template-columns: minmax(260px, 30vw) minmax(0, 1fr);
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    overflow: hidden;
 }
 
 .sidebar {
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--panel);
+    order: 2;
+    width: 100%;
+    flex: 1 1 auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    background:
+        linear-gradient(90deg,
+            rgba(0, 0, 0, 0.92) 0%,
+            rgba(7, 10, 16, 0.82) 14%,
+            rgba(7, 10, 16, 0.82) 86%,
+            rgba(0, 0, 0, 0.92) 100%);
     backdrop-filter: blur(8px);
-    padding: 20px 16px;
+    padding: 14px 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
 }
 
-.brand {
-    margin-bottom: 18px;
-}
-
-.brand h1 {
-    margin: 0;
-    font-family: "Oswald", sans-serif;
-    font-size: 2rem;
-    letter-spacing: 0.04em;
-    line-height: 1;
-}
-
-.brand p {
-    margin: 6px 0 0;
-    color: var(--muted);
-    font-size: 0.95rem;
-}
-
 .channel-list {
-    margin: 0;
+    width: calc(100% - (var(--list-side-gap) * 2));
+    max-width: 980px;
+    margin: 0 auto;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.24);
+}
+
+.channel-list li {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .channel-button {
     width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 12px;
-    background: var(--panel-strong);
-    color: var(--text);
+    border: 0;
+    border-left: 4px solid transparent;
+    border-radius: 0;
+    padding: 14px 16px;
+    background: transparent;
+    color: #ffffff;
     text-align: left;
     cursor: pointer;
-    transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    transition: background 140ms ease, border-color 140ms ease;
 }
 
 .channel-button:hover {
-    transform: translateX(4px);
-    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.12);
+    border-left-color: rgba(255, 255, 255, 0.85);
 }
 
 .channel-button.active {
-    border-color: var(--accent);
-    background: linear-gradient(130deg, var(--accent-soft), rgba(255, 209, 102, 0.13));
+    border-left-color: #ffffff;
+    background: rgba(255, 255, 255, 0.22);
 }
 
 .channel-title {
@@ -116,62 +114,50 @@ body {
     font-weight: 700;
 }
 
+.channel-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.channel-logo {
+    width: 72px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.channel-text {
+    min-width: 0;
+}
+
 .channel-subtitle {
     display: block;
     margin-top: 4px;
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 0.85rem;
 }
 
 .preview {
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--panel);
-    backdrop-filter: blur(8px);
-    padding: 14px;
+    order: 1;
+    width: calc(100% - (var(--list-side-gap) * 2));
+    max-width: 980px;
+    margin: 0 auto;
+    flex: 0 0 62vh;
+    min-height: 280px;
+    background: var(--surface);
+    padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 0;
-}
-
-.preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.preview-title {
-    margin: 0;
-    font-family: "Oswald", sans-serif;
-    letter-spacing: 0.03em;
-    font-size: 1.8rem;
-}
-
-.preview-note {
-    margin: 2px 0 0;
-    color: var(--muted);
-    font-size: 0.92rem;
-}
-
-.open-link {
-    color: #0b1320;
-    background: var(--warm);
-    text-decoration: none;
-    padding: 9px 12px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    white-space: nowrap;
 }
 
 .frame-wrap {
     position: relative;
     flex: 1;
-    min-height: 260px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
+    min-height: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
     overflow: hidden;
     background: #000;
 }
@@ -180,16 +166,13 @@ body {
     content: "";
     position: absolute;
     left: 0;
+    top: 0;
     width: 100%;
+    height: 42%;
     z-index: 3;
     opacity: 0;
     pointer-events: none;
     transition: opacity 260ms ease;
-}
-
-.frame-wrap::before {
-    top: 0;
-    height: 40%;
     background: linear-gradient(to bottom, rgba(2, 5, 11, 0.95) 0%, rgba(2, 5, 11, 0.58) 45%, rgba(2, 5, 11, 0) 100%);
 }
 
@@ -197,6 +180,10 @@ body {
 .frame-wrap:focus-within::before,
 .frame-wrap.overlay-visible::before {
     opacity: 1;
+}
+
+.frame-wrap.user-inactive:not(:hover):not(:focus-within)::before {
+    opacity: 0 !important;
 }
 
 .epg-overlay {
@@ -207,7 +194,7 @@ body {
     z-index: 4;
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 18px;
     padding: 6px 0;
     border-radius: 0;
     border: none;
@@ -226,9 +213,14 @@ body {
     transform: translateY(0);
 }
 
+.frame-wrap.user-inactive:not(:hover):not(:focus-within) .epg-overlay {
+    opacity: 0 !important;
+    transform: translateY(-8px) !important;
+}
+
 .epg-logo-box {
-    width: 58px;
-    height: 58px;
+    width: 90px;
+    height: 90px;
     border-radius: 0;
     overflow: visible;
     display: grid;
@@ -239,44 +231,46 @@ body {
 }
 
 .epg-logo {
-    width: 58px;
-    height: 58px;
+    width: 90px;
+    height: 90px;
     object-fit: contain;
     background: transparent;
 }
 
 .epg-logo-fallback {
     font-family: "Oswald", sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.85rem;
     letter-spacing: 0.04em;
     color: #fff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
 }
 
 .epg-meta {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
 }
+
 
 .epg-channel {
     margin: 0;
     color: #fff;
-    font-size: 1.12rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: 0.03em;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
 .epg-now {
     margin: 0;
     color: #fff;
-    font-size: 0.92rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
 .epg-next-meta {
@@ -290,22 +284,23 @@ body {
 
 .epg-next-label {
     margin: 0;
-    color: rgba(255, 255, 255, 0.86);
-    font-size: 0.76rem;
-    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.85rem;
+    font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
 .epg-next {
     margin: 0;
     color: #fff;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }
 
 #previewFrame {
@@ -315,82 +310,66 @@ body {
     background: #000;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.sidebar, .preview {
-    animation: fadeIn 380ms ease both;
-}
-
 @media (max-width: 920px) {
-    .app {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(0, 1fr);
+    :root {
+        --list-side-gap: 12px;
+    }
+
+    .preview {
+        flex-basis: 56vh;
+        min-height: 220px;
     }
 
     .sidebar {
-        padding: 16px 14px;
+        padding: 12px 0;
     }
 
-    .brand h1 {
-        font-size: 1.7rem;
+    .channel-list {
+        margin: 0 auto;
     }
 
-    .preview-title {
-        font-size: 1.45rem;
+    .channel-button {
+        padding: 12px;
     }
 
-    .preview-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .channel-logo {
+        width: 60px;
+        height: 20px;
     }
 
-    .open-link {
-        width: 100%;
-        text-align: center;
+    .channel-subtitle {
+        display: none;
     }
 
     .epg-overlay {
         left: 8px;
         right: 8px;
         top: 8px;
-        gap: 10px;
-        padding: 8px 10px;
+        padding: 4px 0;
+        gap: 12px;
     }
 
     .epg-logo-box {
-        width: 46px;
-        height: 46px;
+        width: 68px;
+        height: 68px;
     }
 
     .epg-logo {
-        width: 46px;
-        height: 46px;
+        width: 68px;
+        height: 68px;
     }
 
     .epg-channel {
-        font-size: 0.95rem;
+        font-size: 1.35rem;
     }
 
-    .epg-now {
-        font-size: 0.84rem;
+    .epg-now,
+    .epg-next {
+        font-size: 1.1rem;
     }
 
     .epg-next-meta {
-        min-width: 34%;
-    }
-
-    .epg-next-label,
-    .epg-next {
-        font-size: 0.78rem;
+        display: none;
     }
 }
 </style>
@@ -398,22 +377,93 @@ body {
 <body>
 <div class="app">
     <aside class="sidebar">
-        <div class="brand">
-            <h1>Canales</h1>
-            <p>Selecciona un canal para verlo en la previsualizacion.</p>
-        </div>
-
         <ul class="channel-list">
+                                    <li>
+                                        <button class="channel-button" data-src="hbo xtreme.html" data-name="HBO XTREME">
+                                            <span class="channel-row">
+                                                <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/HBO_Plus_logo.png" alt="Logo HBO XTREME">
+                                                <span class="channel-text">
+                                                    <span class="channel-title">HBO XTREME</span>
+                                                    <span class="channel-subtitle">Canal 18 - DASH</span>
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </li>
+                        <li>
+                            <button class="channel-button" data-src="hbo plus.html" data-name="HBO PLUS">
+                                <span class="channel-row">
+                                    <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/HBO_Plus_logo.png" alt="Logo HBO Plus">
+                                    <span class="channel-text">
+                                        <span class="channel-title">HBO PLUS</span>
+                                        <span class="channel-subtitle">Canal 17 - HLS</span>
+                                    </span>
+                                </span>
+                            </button>
+                        </li>
             <li>
                 <button class="channel-button active" data-src="cinemax.html" data-name="CINEMAX HD">
-                    <span class="channel-title">CINEMAX HD</span>
-                    <span class="channel-subtitle">Canal 01 - ClearKey</span>
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Cinemax_LA.png" alt="Logo CINEMAX">
+                        <span class="channel-text">
+                            <span class="channel-title">CINEMAX HD</span>
+                            <span class="channel-subtitle">Canal 01 - ClearKey</span>
+                        </span>
+                    </span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button active" data-src="golden_edege_mexico.html" data-name="Golden Edege - Totalplay">
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Cinemax_LA.png" alt="Logo CINEMAX">
+                        <span class="channel-text">
+                            <span class="channel-title">Golden Edege - Totalplay</span>
+                            <span class="channel-subtitle">Canal 331 </span>
+                        </span>
+                    </span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="bandamax_plus.html" data-name="BANDAMAX PLUS">
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://i.scdn.co/image/ab6775700000ee85f9a5fd09451e2f74ca878c8d" alt="Logo BANDAMAX PLUS">
+                        <span class="channel-text">
+                            <span class="channel-title">BANDAMAX PLUS</span>
+                            <span class="channel-subtitle">Canal 02 - ClearKey</span>
+                        </span>
+                    </span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="discovery kids.html" data-name="DISCOVERY KIDS">
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Discovery_Kids_logo_2016.png" alt="Logo Discovery Kids">
+                        <span class="channel-text">
+                            <span class="channel-title">DISCOVERY KIDS</span>
+                            <span class="channel-subtitle">Canal 15 - ClearKey</span>
+                        </span>
+                    </span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="tlnovelas.html" data-name="TLNOVELAS">
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Discovery_Kids_logo_2016.png" alt="Logo Discovery Kids">
+                        <span class="channel-text">
+                            <span class="channel-title">TLNOVELAS</span>
+                            <span class="channel-subtitle">Canal 15 - ClearKey</span>
+                        </span>
+                    </span>
                 </button>
             </li>
             <li>
                 <button class="channel-button" data-src="bandamax.html" data-name="BANDAMAX HD">
-                    <span class="channel-title">BANDAMAX HD</span>
-                    <span class="channel-subtitle">Canal 02 - ClearKey</span>
+                    <span class="channel-row">
+                        <img class="channel-logo" src="https://i.scdn.co/image/ab6775700000ee85f9a5fd09451e2f74ca878c8d" alt="Logo BANDAMAX">
+                        <span class="channel-text">
+                            <span class="channel-title">BANDAMAX HD</span>
+                            <span class="channel-subtitle">Canal 02 - ClearKey</span>
+                        </span>
+                    </span>
                 </button>
             </li>
             <li>
@@ -434,9 +484,21 @@ body {
                     <span class="channel-subtitle">Canal 06 - ClearKey</span>
                 </button>
             </li>
+            <li>                
+                <button class="channel-button" data-src="depelicula.html" data-name="DE PELICULA">
+                    <span class="channel-title">De pelicula</span>
+                    <span class="channel-subtitle">Canal 06 - ClearKey</span>
+                </button>
+            </li>
             <li>
                 <button class="channel-button" data-src="distritocomedia.html" data-name="DISTRITO COMEDIA">
                     <span class="channel-title">DISTRITO COMEDIA</span>
+                    <span class="channel-subtitle">Canal 07 - ClearKey</span>
+                </button>
+            </li>
+            <li>
+                <button class="channel-button" data-src="space.html" data-name="SPACE">
+                    <span class="channel-title">Space</span>
                     <span class="channel-subtitle">Canal 07 - ClearKey</span>
                 </button>
             </li>
@@ -453,6 +515,12 @@ body {
                 </button>
             </li>
             <li>
+                <button class="channel-button" data-src="telehit musica.html" data-name="TELEHIT MÚSICA">
+                    <span class="channel-title">TELEHIT MÚSICA</span>
+                    <span class="channel-subtitle">Canal 16 - ClearKey</span>
+                </button>
+            </li>
+            <li>
                 <button class="channel-button" data-src="cinemaxeast.html" data-name="CINEMAX EAST">
                     <span class="channel-title">CINEMAX EAST</span>
                     <span class="channel-subtitle">Canal 11 - ClearKey</span>
@@ -462,6 +530,18 @@ body {
                 <button class="channel-button" data-src="golden.html" data-name="GOLDEN">
                     <span class="channel-title">GOLDEN</span>
                     <span class="channel-subtitle">Canal 12 - ClearKey</span>
+                </button>
+            </li>
+                <li>
+                    <button class="channel-button" data-src="estrellasmexico.html" data-name="LAS ESTRELLAS MÉXICO">
+                        <span class="channel-title">LAS ESTRELLAS MÉXICO</span>
+                        <span class="channel-subtitle">Canal 14 - ClearKey</span>
+                    </button>
+                </li>
+            <li>
+                <button class="channel-button" data-src="goldenedge.html" data-name="GOLDEN EDGE">
+                    <span class="channel-title">GOLDEN EDGE</span>
+                    <span class="channel-subtitle">Canal 13 - ClearKey</span>
                 </button>
             </li>
             <li>
@@ -474,14 +554,6 @@ body {
     </aside>
 
     <main class="preview">
-        <div class="preview-header">
-            <div>
-                <h2 id="channelName" class="preview-title">CINEMAX HD</h2>
-                <p class="preview-note">Previsualizacion en tiempo real</p>
-            </div>
-            <a id="openChannelLink" class="open-link" href="cinemax.html" target="_blank" rel="noopener noreferrer">Abrir canal</a>
-        </div>
-
         <div class="frame-wrap">
             <iframe
                 id="previewFrame"
@@ -518,11 +590,12 @@ const epgLogoFallback = document.getElementById("epgLogoFallback");
 const epgChannelName = document.getElementById("epgChannelName");
 const epgNowTitle = document.getElementById("epgNowTitle");
 const epgNextTitle = document.getElementById("epgNextTitle");
-const channelName = document.getElementById("channelName");
-const openChannelLink = document.getElementById("openChannelLink");
 const storageKey = "BITMOVIN_PLAYER_KEY";
 const defaultBitmovinKey = "fa7bb753-749b-47ba-8134-838e896b252d";
 let overlayTimeoutId = null;
+let userInactivityTimeoutId = null;
+const overlayVisibleMs = 3500;
+const userInactivityMs = 3500;
 const cinemaxXmltvSourceUrl = "/epg/mx1.xml.gz";
 const cinemaxXmltvDirectUrl = "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz";
 const cinemaxChannelHint = "Canal.Cinemax.(México).mx";
@@ -599,6 +672,12 @@ const channelEPG = {
         now: "EPG pendiente (envia tu lista)",
         next: "Siguiente: pendiente"
     },
+    goldenedge: {
+        logo: "",
+        channelName: "GOLDEN EDGE",
+        now: "EPG pendiente (envia tu lista)",
+        next: "Siguiente: pendiente"
+    },
     warner: {
         logo: "",
         channelName: "WARNER CHANNEL MX",
@@ -610,6 +689,23 @@ const channelEPG = {
 const currentBitmovinKey = (localStorage.getItem(storageKey) || "").trim();
 if (!currentBitmovinKey && defaultBitmovinKey) {
     localStorage.setItem(storageKey, defaultBitmovinKey);
+}
+
+function renumberChannelSubtitles() {
+    buttons.forEach((button, index) => {
+        const subtitle = button.querySelector(".channel-subtitle");
+        if (!subtitle) {
+            return;
+        }
+
+        const text = String(subtitle.textContent || "").trim();
+        const typeMatch = text.match(/-\s*(.+)$/);
+        const channelType = typeMatch && typeMatch[1]
+            ? typeMatch[1].trim()
+            : "ClearKey";
+
+        subtitle.textContent = `Canal ${index + 1} - ${channelType}`;
+    });
 }
 
 function getStoredBitmovinKey() {
@@ -1149,13 +1245,11 @@ if (epgLogo) {
     });
 }
 
-function showFrameOverlay(durationMs = 3500) {
+function showFrameOverlay(durationMs = overlayVisibleMs) {
     if (!frameWrap) {
         return;
     }
 
-    frameWrap.classList.remove("overlay-visible");
-    void frameWrap.offsetWidth;
     frameWrap.classList.add("overlay-visible");
 
     if (overlayTimeoutId) {
@@ -1165,6 +1259,31 @@ function showFrameOverlay(durationMs = 3500) {
     overlayTimeoutId = setTimeout(() => {
         frameWrap.classList.remove("overlay-visible");
     }, durationMs);
+}
+
+function scheduleUserInactivityHide(durationMs = userInactivityMs) {
+    if (userInactivityTimeoutId) {
+        clearTimeout(userInactivityTimeoutId);
+    }
+
+    userInactivityTimeoutId = setTimeout(() => {
+        if (!frameWrap) {
+            return;
+        }
+
+        frameWrap.classList.add("user-inactive");
+        frameWrap.classList.remove("overlay-visible");
+    }, durationMs);
+}
+
+function markUserActivity() {
+    if (!frameWrap) {
+        return;
+    }
+
+    frameWrap.classList.remove("user-inactive");
+    showFrameOverlay(overlayVisibleMs);
+    scheduleUserInactivityHide(userInactivityMs);
 }
 
 function selectChannel(button) {
@@ -1177,10 +1296,8 @@ function selectChannel(button) {
     button.classList.add("active");
 
     previewFrame.src = src;
-    channelName.textContent = name;
-    openChannelLink.href = src;
     updateEpgOverlay(channelKey, name);
-    showFrameOverlay(3500);
+    markUserActivity();
 }
 
 function requestAudioInFrame() {
@@ -1192,12 +1309,26 @@ function requestAudioInFrame() {
 }
 
 previewFrame.addEventListener("load", () => {
-    showFrameOverlay(3500);
+    markUserActivity();
     requestAudioInFrame();
     setTimeout(requestAudioInFrame, 250);
     setTimeout(requestAudioInFrame, 900);
     startEpgAfterFirstChannelLoad();
 });
+
+frameWrap.addEventListener("mouseenter", markUserActivity);
+frameWrap.addEventListener("mousemove", markUserActivity, {passive: true});
+frameWrap.addEventListener("mousedown", markUserActivity);
+previewFrame.addEventListener("mouseenter", markUserActivity);
+previewFrame.addEventListener("mousemove", markUserActivity, {passive: true});
+previewFrame.addEventListener("mousedown", markUserActivity);
+document.addEventListener("mousemove", markUserActivity, {passive: true});
+document.addEventListener("mousedown", markUserActivity);
+document.addEventListener("pointermove", markUserActivity, {passive: true});
+document.addEventListener("pointerdown", markUserActivity);
+document.addEventListener("touchstart", markUserActivity, {passive: true});
+document.addEventListener("keydown", markUserActivity);
+document.addEventListener("wheel", markUserActivity, {passive: true});
 
 document.addEventListener("click", requestAudioInFrame);
 document.addEventListener("pointerdown", requestAudioInFrame);
@@ -1211,7 +1342,9 @@ buttons.forEach((button) => {
     });
 });
 
+renumberChannelSubtitles();
 selectChannel(getActiveButton());
 </script>
 </body>
 </html>
+
